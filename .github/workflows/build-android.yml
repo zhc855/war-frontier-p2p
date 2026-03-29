@@ -53,9 +53,9 @@ jobs:
 
     - name: Install Cordova platforms
       run:
-           cordova platform rm android || true
-           cordova platform add android
-           cordova prepare android
+        cordova platform rm android || true
+        cordova platform add android
+        cordova prepare android
 
     - name: Build Debug APK 
       run: npx cordova build android --debug
