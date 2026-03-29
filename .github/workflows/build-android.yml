@@ -50,6 +50,13 @@ jobs:
         cordova platform rm android || true
         cordova platform add android
         cordova prepare android
+    - name: Set Gradle wrapper to 7.6.1
+      run: |
+           cd platforms/android
+           mkdir -p gradle/wrapper
+           echo "distributionUrl=https\\://services.gradle.org/distributions/gradle-7.6.1-bin.zip" > gradle/wrapper/gradle-wrapper.properties
+           chmod +x gradlew
+           ./gradlew wrapper --gradle-version=7.6.1
 
     - name: Build Debug APK
       run: npx cordova build android --debug
