@@ -33,6 +33,10 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
 
+    - name: Install Android build tools 30.0.3
+      run: |
+        sdkmanager "build-tools;30.0.3"
+
     - name: Create www directory
       run: |
         mkdir -p www
