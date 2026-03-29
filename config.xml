@@ -21,6 +21,7 @@
     
     <platform name="android">
         <allow-intent href="market:*" />
+        <preference name="GradleVersion" value="7.6.1" />
         <icon density="ldpi" src="res/icon/android/ldpi.png" />
         <icon density="mdpi" src="res/icon/android/mdpi.png" />
         <icon density="hdpi" src="res/icon/android/hdpi.png" />
