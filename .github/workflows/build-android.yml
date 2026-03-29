@@ -50,10 +50,7 @@ jobs:
     - name: Set Gradle wrapper version
       run: |
         cd platforms/android
-        mkdir -p gradle/wrapper
-        echo "distributionUrl=https\://services.gradle.org/distributions/gradle-7.6.1-bin.zip" > gradle/wrapper/gradle-wrapper.properties
-        chmod +x gradlew
-        ./gradlew wrapper --gradle-version=7.6.1
+        gradle wrapper --gradle-version=7.6.1
 
     - name: Build Debug APK
       run: npx cordova build android --debug
