@@ -1,0 +1,172 @@
+===================================
+     War Front - Quick Start Guide
+===================================
+
+QUICK START (3 Steps)
+-----------------------------------------------
+
+Step 1: Setup Environment
+-----------------------------------------------
+
+Double click: setup_env.bat
+
+This script will:
+- Check Node.js installation
+- Check Java JDK installation
+- Check Android SDK installation
+- Install Cordova
+- Install project dependencies
+- Setup Android platform
+
+Wait for setup to complete (5-10 minutes)
+
+Step 2: Build APK
+-----------------------------------------------
+
+Double click: build_apk.bat
+
+Select build type:
+- Enter 1 for Debug version (faster, for testing)
+- Enter 2 for Release version (optimized, for publishing)
+
+Wait for build to complete (5-15 minutes)
+
+APK will be created at:
+platforms\android\app\build\outputs\apk\debug\app-debug.apk
+
+Step 3: Install on Phone
+-----------------------------------------------
+
+1. Transfer APK file to your phone (USB or cloud)
+2. On your phone, open file manager
+3. Find the APK file
+4. Tap to install
+5. If prompted, allow installation from unknown sources
+6. Open the app and start playing!
+
+===================================
+     Multiplayer Setup
+===================================
+
+Option 1: LAN Multiplayer (Same WiFi)
+-----------------------------------------------
+
+1. Start server on PC:
+   - Double click: 启动服务器.bat
+   - Note the IP address shown (e.g., 192.168.1.100)
+
+2. Connect on Phone 1:
+   - Open app -> Multiplayer
+   - Enter server address: http://192.168.1.100:3000
+   - Click Connect
+   - Enter player name
+   - Click Create Room
+   - Note the room ID (e.g., ABC123)
+
+3. Connect on Phone 2:
+   - Open app -> Multiplayer
+   - Enter server address: http://192.168.1.100:3000
+   - Click Connect
+   - Enter player name
+   - Enter room ID: ABC123
+   - Click Join Room
+
+4. Start playing!
+
+Option 2: Auto Detect Server
+-----------------------------------------------
+
+In the multiplayer screen:
+- Click "Auto Detect" button
+- App will automatically scan for servers on your LAN
+- Select the detected server
+
+===================================
+     Troubleshooting
+===================================
+
+Q: Setup script shows encoding errors?
+A: Use the English version scripts:
+   - setup_env.bat (instead of setup_environment.bat)
+   - build_apk.bat (instead of build_simple.bat)
+
+Q: Build failed?
+A: Check:
+   1. Java is installed (JDK 17+)
+   2. Android SDK is installed
+   3. Network connection is working
+   4. Run: gradlew.bat clean (in platforms/android folder)
+
+Q: Cannot connect to server?
+A: Check:
+   1. Server is running
+   2. Phone and PC are on same WiFi
+   3. Server address is correct
+   4. Firewall is not blocking connection
+
+Q: Game lags on phone?
+A: Try:
+   1. Close other apps
+   2. Disable animations in settings
+   3. Reduce volume
+   4. Restart game
+
+===================================
+     File Locations
+===================================
+
+Project folder:
+C:\Users\Z\自制卡牌\kards-style\
+
+APK location:
+platforms\android\app\build\outputs\apk\debug\app-debug.apk
+
+Server script:
+server\start.bat
+或
+启动服务器.bat
+
+===================================
+     Requirements
+===================================
+
+Minimum Requirements:
+- Windows 10 or higher
+- Node.js 18+
+- Java JDK 17+
+- Android SDK (API 21+)
+- 8GB RAM
+- 10GB free disk space
+
+Phone Requirements:
+- Android 5.0 (Lollipop) or higher
+- 1GB RAM minimum
+- WiFi connection for multiplayer
+
+===================================
+     Need Help?
+===================================
+
+For detailed documentation:
+- MOBILE_APP_GUIDE.md (Chinese)
+- ANDROID_BUILD_GUIDE.txt (English)
+
+For common issues:
+- Check the troubleshooting section above
+- Run setup_env.bat again to reset environment
+- Check Java version: java -version
+- Check Node.js version: node --version
+
+===================================
+     Tips
+===================================
+
+1. First build takes longer (10-20 minutes)
+2. Use Debug version for testing
+3. Use Release version for publishing
+4. Both phones need same WiFi for LAN play
+5. You can also play via cloud server
+6. Game works best in landscape mode
+7. Enable WiFi for multiplayer features
+
+===================================

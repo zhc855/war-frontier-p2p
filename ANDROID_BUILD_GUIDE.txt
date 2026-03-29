@@ -1,0 +1,194 @@
+===============================================
+        ANDROID APP BUILD GUIDE
+===============================================
+
+QUICK START (3 Steps)
+-----------------------------------------------
+
+Step 1: Install Required Software
+-----------------------------------------------
+
+You need to install:
+1. Node.js (v14+)
+   Download: https://nodejs.org/
+
+2. Java JDK (JDK 11 or higher)
+   Download: https://www.oracle.com/java/technologies/downloads/
+   
+   OR install Android Studio (includes everything):
+   Download: https://developer.android.com/studio
+
+Step 2: Setup Project
+-----------------------------------------------
+
+Run: setup_android.bat
+
+This will:
+- Install Cordova dependencies
+- Add Android platform
+
+Step 3: Build APK
+-----------------------------------------------
+
+Run: build_android.bat
+
+Wait for build to complete (5-10 minutes)
+
+APK location:
+platforms\android\app\build\outputs\apk\debug\app-debug.apk
+
+===============================================
+
+MANUAL INSTALLATION STEPS
+-----------------------------------------------
+
+1. Install Node.js
+   Download: https://nodejs.org/
+   Install and restart computer
+
+2. Install Java JDK
+   Download: https://www.oracle.com/java/technologies/downloads/
+   Install JDK 11 or higher
+   Restart computer
+
+3. Install Android Studio (Optional but recommended)
+   Download: https://developer.android.com/studio
+   This includes:
+   - JDK
+   - Android SDK
+   - Build tools
+
+4. Setup Environment Variables
+   - JAVA_HOME: Point to JDK directory
+   - ANDROID_HOME: Point to Android SDK directory
+   - ANDROID_SDK_ROOT: Point to Android SDK directory
+
+5. Restart computer
+
+6. Run setup_android.bat
+
+7. Run build_android.bat
+
+===============================================
+
+PHONE TO PHONE MULTIPLAYER
+-----------------------------------------------
+
+Method 1: Use Built-in Server
+- Start server on one phone
+- Enter server IP on other phone
+- Play via room ID
+
+Method 2: Use PC Server
+- Run start_server.bat on PC
+- Enter PC's LAN IP on both phones
+- Play via room ID
+
+Method 3: Use Public Server
+- Deploy server to cloud
+- All phones connect to public IP
+- Play via room ID
+
+===============================================
+
+TROUBLESHOOTING
+-----------------------------------------------
+
+Q: Build failed?
+A: Check:
+   - Node.js version >= 14
+   - JDK is installed
+   - Android SDK is installed
+   - Environment variables are correct
+
+Q: Cannot connect to network?
+A: Check:
+   - Phone is connected to network
+   - Server address is correct
+   - Firewall is not blocking connection
+
+Q: App crashes?
+A: Check:
+   - Android version >= 5.0
+   - Enough storage space
+   - App permissions granted
+
+===============================================
+
+QUICK COMMANDS
+-----------------------------------------------
+
+Check connected devices:
+adb devices
+
+Install app:
+adb install app-debug.apk
+
+Uninstall app:
+adb uninstall com.warfront.game
+
+View logs:
+adb logcat
+
+Clear app data:
+adb shell pm clear com.warfront.game
+
+===============================================
+
+ENVIRONMENT CHECK
+-----------------------------------------------
+
+Check Node.js:
+node --version
+
+Check Java:
+java -version
+
+Check Android SDK:
+echo %ANDROID_HOME%
+
+Check Gradle:
+gradle --version
+
+===============================================
+
+SUCCESS INDICATORS
+-----------------------------------------------
+
+Build success:
+BUILD SUCCESSFUL
+
+APK file size: 15-25 MB
+
+Location: platforms\android\app\build\outputs\apk\debug\
+
+===============================================
+
+BUILD SCRIPTS
+-----------------------------------------------
+
+setup_android.bat - Prepare environment
+build_android.bat - Build debug version
+build_android_release.bat - Build release version
+
+===============================================
+
+APP INFO
+-----------------------------------------------
+
+Name: War Front
+Package: com.warfront.game
+Version: 0.2.0
+Min Android: 5.0 (API 21)
+Target Android: 13 (API 33)
+Screen: Landscape
+Network: Configured
+
+===============================================
+
+NEED HELP?
+-----------------------------------------------
+
+See: android_build_guide.md
+
+===============================================

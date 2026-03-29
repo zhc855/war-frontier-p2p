@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战争前线 - KARDS风格卡牌对战</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 主菜单 -->
+    <div id="main-menu" class="screen">
+        <div class="menu-container">
+            <h1 class="game-title">⚔️ 战争前线 ⚔️</h1>
+            <p class="game-subtitle">KARDS风格战略卡牌对战</p>
+            
+            <div class="menu-buttons">
+                <button class="menu-btn" id="btn-deckbuilder">📦 构建牌组</button>
+                <button class="menu-btn" id="btn-play-local">🎮 本地对战</button>
+                <button class="menu-btn" id="btn-play-online">🌐 联机对战</button>
+                <button class="menu-btn" id="btn-cards">🃏 卡牌图鉴</button>
+                <button class="menu-btn" id="btn-achievements">🏆 成就</button>
+                <button class="menu-btn" id="btn-cardback">🎨 卡背定制</button>
+                <button class="menu-btn" id="btn-settings">⚙️ 设置</button>
+            </div>
+            
+            <div class="menu-info">
+                <p>版本: 0.2.0-beta</p>
+                <p>5个国家阵营 | 105张卡牌</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 牌组构建器 -->
+    <div id="deckbuilder" class="screen hidden">
+        <div class="deckbuilder-container">
+            <div class="deckbuilder-header">
+                <h2>📦 牌组构建器</h2>
+                <button class="back-btn" id="btn-back-menu">← 返回</button>
+            </div>
+            
+            <div class="deckbuilder-content">
+                <!-- 牌组信息 -->
+                <div class="deck-info">
+                    <h3>当前牌组</h3>
+                    <p>卡牌数量: <span id="deck-count">0</span>/40</p>
+                    <p>阵营: <span id="deck-faction">未选择</span></p>
+                    <div class="deck-preview" id="deck-preview"></div>
+                    <button class="action-btn" id="btn-save-deck">💾 保存牌组</button>
+                    <button class="action-btn" id="btn-clear-deck">🗑️ 清空牌组</button>
+                    <button class="action-btn" id="btn-select-current-deck" style="display: none;">✓ 选择此牌组</button>
+                </div>
+                
+                <!-- 卡牌选择 -->
+                <div class="card-selection">
+                    <p class="selection-hint">👆 先选择主阵营，再选择次阵营（可选）</p>
+                    <div class="faction-selector">
+                        <button class="faction-btn" data-faction="germany">🇩🇪 德国</button>
+                        <button class="faction-btn" data-faction="usa">🇺🇸 美国</button>
+                        <button class="faction-btn" data-faction="britain">🇬🇧 英国</button>
+                        <button class="faction-btn" data-faction="soviet">🇷🇺 苏联</button>
+                        <button class="faction-btn" data-faction="japan">🇯🇵 日本</button>
+                    </div>
+
+                    <div class="card-filter">
+                        <select id="card-type-filter">
+                            <option value="all">所有类型</option>
+                            <option value="unit">单位</option>
+                            <option value="order">指令</option>
+                            <option value="reinforcement">增援</option>
+                            <option value="suppression">压制</option>
+                            <option value="support">支援</option>
+                            <option value="counter">反击</option>
+                        </select>
+                        
+                        <select id="card-cost-filter">
+                            <option value="all">所有费用</option>
+                            <option value="0-1">0-1</option>
+                            <option value="2-3">2-3</option>
+                            <option value="4-5">4-5</option>
+                            <option value="6+">6+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="cards-grid" id="cards-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 牌组选择界面 -->
+    <div id="deck-selector" class="screen hidden">
+        <div class="deck-selector-container">
+            <div class="deck-selector-header">
+                <h2>📦 选择牌组</h2>
+                <button class="back-btn" id="btn-selector-back">← 返回</button>
+            </div>
+
+            <div class="saved-decks-list" id="saved-decks-list"></div>
+
+            <button class="action-btn" id="btn-create-new-deck">+ 创建新牌组</button>
+        </div>
+    </div>
+
+    <!-- 游戏界面 -->
+    <div id="game-screen" class="screen hidden">
+        <div class="game-container">
+            <!-- 顶部信息栏 -->
+            <div class="info-bar">
+                <div class="player-info" id="player2-info">
+                    <span class="player-name">🎖️ 玩家2</span>
+                    <span class="player-faction" id="player2-faction">🇩🇪 德国</span>
+                    <span class="player-cp">指挥点: <span id="player2-cp">0</span>/12</span>
+                    <span class="player-hq">总部: <span id="player2-hq">20</span>❤️</span>
+                    <span class="deck-count-display">牌组: <span id="player2-deck">40</span></span>
+                </div>
+                <div class="turn-info">
+                    <span id="current-turn">玩家1 的回合</span>
+                    <span id="turn-number">回合: 1</span>
+                </div>
+                <div class="player-info" id="player1-info">
+                    <span class="player-name">🎖️ 玩家1</span>
+                    <span class="player-faction" id="player1-faction">🇺🇸 美国</span>
+                    <span class="player-cp">指挥点: <span id="player1-cp">0</span>/12</span>
+                    <span class="player-hq">总部: <span id="player1-hq">20</span>❤️</span>
+                    <span class="deck-count-display">牌组: <span id="player1-deck">40</span></span>
+                </div>
+            </div>
+
+            <!-- 战线区域 -->
+            <div class="battlefield-container">
+                <!-- 玩家2支援战线 -->
+                <div class="support-line player2-support">
+                    <div class="line-label">玩家2支援战线</div>
+                    <div class="slots" id="player2-slots">
+                        <div class="slot" data-index="0" data-area="support" data-player="2"></div>
+                        <div class="slot" data-index="1" data-area="support" data-player="2"></div>
+                        <div class="slot" data-index="2" data-area="support" data-player="2"></div>
+                        <div class="slot" data-index="3" data-area="support" data-player="2"></div>
+                    </div>
+                </div>
+
+                <!-- 中间前线 -->
+                <div class="frontline" id="frontline">
+                    <div class="line-label">前线</div>
+                    <div class="frontline-slots" id="frontline-slots">
+                        <div class="slot" data-index="0" data-area="frontline" data-player="0"></div>
+                        <div class="slot" data-index="1" data-area="frontline" data-player="0"></div>
+                        <div class="slot" data-index="2" data-area="frontline" data-player="0"></div>
+                        <div class="slot" data-index="3" data-area="frontline" data-player="0"></div>
+                    </div>
+                    <div class="frontline-status" id="frontline-status">中立区域</div>
+                </div>
+
+                <!-- 玩家1支援战线 -->
+                <div class="support-line player1-support">
+                    <div class="line-label">玩家1支援战线</div>
+                    <div class="slots" id="player1-slots">
+                        <div class="slot" data-index="0" data-area="support" data-player="1"></div>
+                        <div class="slot" data-index="1" data-area="support" data-player="1"></div>
+                        <div class="slot" data-index="2" data-area="support" data-player="1"></div>
+                        <div class="slot" data-index="3" data-area="support" data-player="1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部操作区域 -->
+            <div class="controls-area">
+                <!-- 效果展示区 -->
+                <div class="effects-display" id="effects-display"></div>
+                
+                <!-- 手牌 -->
+                <div class="hand-area">
+                    <div class="hand-label">手牌</div>
+                    <div class="hand" id="player-hand"></div>
+                </div>
+
+                <!-- 控制按钮 -->
+                <div class="game-controls">
+                    <button id="deploy-btn" class="control-btn" disabled>📦 部署单位</button>
+                    <button id="move-btn" class="control-btn" disabled>🚶 移动单位</button>
+                    <button id="attack-btn" class="control-btn" disabled>⚔️ 攻击目标</button>
+                    <button id="wait-btn" class="control-btn" disabled>⏸️ 待命</button>
+                </div>
+
+                <!-- 游戏按钮 -->
+                <div class="game-buttons">
+                    <button id="end-turn-btn" class="game-btn">结束回合</button>
+                    <button id="restart-btn" class="game-btn">重新开始</button>
+                    <button id="quit-btn" class="game-btn">退出游戏</button>
+                </div>
+
+                <!-- 游戏日志 -->
+                <div class="game-log" id="game-log"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 卡牌详情弹窗 -->
+    <div id="card-detail-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="close-btn" id="close-modal">×</button>
+            <div id="card-detail-content"></div>
+        </div>
+    </div>
+
+    <!-- 卡牌图鉴 -->
+    <div id="card-gallery" class="screen hidden">
+        <div class="gallery-container">
+            <div class="gallery-header">
+                <h2>🃏 卡牌图鉴</h2>
+                <button class="back-btn" id="btn-gallery-back">← 返回</button>
+            </div>
+
+            <div class="gallery-stats" id="gallery-stats">
+                <p>总卡牌数: <span id="total-cards">0</span></p>
+                <p>已解锁: <span id="unlocked-cards">0</span> / <span id="total-cards-stat">0</span></p>
+            </div>
+
+            <div class="gallery-filters">
+                <div class="filter-group">
+                    <label>阵营:</label>
+                    <select id="gallery-faction-filter">
+                        <option value="all">全部阵营</option>
+                        <option value="germany">🇩🇪 德国</option>
+                        <option value="usa">🇺🇸 美国</option>
+                        <option value="britain">🇬🇧 英国</option>
+                        <option value="soviet">🇷🇺 苏联</option>
+                        <option value="japan">🇯🇵 日本</option>
+                        <option value="neutral">⚪ 中立</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>类型:</label>
+                    <select id="gallery-type-filter">
+                        <option value="all">所有类型</option>
+                        <option value="unit">单位</option>
+                        <option value="order">指令</option>
+                        <option value="reinforcement">增援</option>
+                        <option value="suppression">压制</option>
+                        <option value="support">支援</option>
+                        <option value="counter">反击</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>费用:</label>
+                    <select id="gallery-cost-filter">
+                        <option value="all">所有费用</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8+</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>稀有度:</label>
+                    <select id="gallery-rarity-filter">
+                        <option value="all">所有稀有度</option>
+                        <option value="common">普通</option>
+                        <option value="rare">稀有</option>
+                        <option value="epic">史诗</option>
+                        <option value="legendary">传说</option>
+                    </select>
+                </div>
+
+                <button class="action-btn" id="gallery-reset-filters">重置筛选</button>
+            </div>
+
+            <div class="gallery-grid" id="gallery-grid"></div>
+        </div>
+    </div>
+
+    <!-- 设置界面 -->
+    <div id="settings" class="screen hidden">
+        <div class="settings-container">
+            <div class="settings-header">
+                <h2>⚙️ 设置</h2>
+                <button class="back-btn" id="btn-settings-back">← 返回</button>
+            </div>
+
+            <div class="settings-content">
+                <!-- 音频设置 -->
+                <div class="settings-section">
+                    <h3>🔊 音频设置</h3>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="setting-sound" checked>
+                            <span>音效</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <span>音量</span>
+                            <input type="range" id="setting-volume" min="0" max="100" value="70">
+                            <span id="volume-value">70%</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="setting-music" checked>
+                            <span>背景音乐</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 显示设置 -->
+                <div class="settings-section">
+                    <h3>🖼️ 显示设置</h3>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="setting-animations" checked>
+                            <span>动画效果</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="setting-card-details" checked>
+                            <span>显示卡牌详情</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="setting-keyword-tooltips" checked>
+                            <span>关键字提示</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 游戏设置 -->
+                <div class="settings-section">
+                    <h3>🎮 游戏设置</h3>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="setting-auto-end-turn">
+                            <span>自动结束回合</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="setting-confirm-actions" checked>
+                            <span>操作确认</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <span>回合计时</span>
+                            <select id="setting-timer">
+                                <option value="0">无限制</option>
+                                <option value="30">30秒</option>
+                                <option value="60" selected>60秒</option>
+                                <option value="90">90秒</option>
+                                <option value="120">120秒</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 数据管理 -->
+                <div class="settings-section">
+                    <h3>💾 数据管理</h3>
+                    <div class="setting-item">
+                        <button class="action-btn" id="btn-clear-decks">清除所有牌组</button>
+                    </div>
+                    <div class="setting-item">
+                        <button class="action-btn" id="btn-reset-settings">重置设置</button>
+                    </div>
+                    <div class="setting-item">
+                        <button class="action-btn danger" id="btn-clear-all-data">清除所有数据</button>
+                    </div>
+                </div>
+
+                <!-- 关于 -->
+                <div class="settings-section">
+                    <h3>ℹ️ 关于</h3>
+                    <div class="about-info">
+                        <p><strong>游戏名称:</strong> 战争前线</p>
+                        <p><strong>版本:</strong> 0.1.0-alpha</p>
+                        <p><strong>卡牌数量:</strong> 75张</p>
+                        <p><strong>阵营数量:</strong> 5个</p>
+                        <p><strong>开发团队:</strong> iFlow CLI</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-footer">
+                <button class="action-btn" id="btn-save-settings">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 成就界面 -->
+    <div id="achievements" class="screen hidden">
+        <div class="achievements-container">
+            <div class="achievements-header">
+                <h2>🏆 成就系统</h2>
+                <button class="back-btn" id="btn-achievements-back">← 返回</button>
+            </div>
+
+            <!-- 成就统计 -->
+            <div class="achievements-stats">
+                <div class="stat-box">
+                    <h3>🎮 游戏统计</h3>
+                    <p>总游戏数: <span id="total-games">0</span></p>
+                    <p>胜利次数: <span id="total-wins">0</span></p>
+                    <p>胜率: <span id="win-rate">0%</span></p>
+                </div>
+                <div class="stat-box">
+                    <h3>🏅 成就进度</h3>
+                    <p>已解锁: <span id="unlocked-count">0</span>/<span id="total-achievements">0</span></p>
+                    <p>解锁率: <span id="unlock-rate">0%</span></p>
+                </div>
+                <div class="stat-box">
+                    <h3>💰 金币</h3>
+                    <p class="gold-amount"><span id="gold-amount">0</span> 金币</p>
+                </div>
+            </div>
+
+            <!-- 成就筛选 -->
+            <div class="achievements-filter">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="unlocked">已解锁</button>
+                <button class="filter-btn" data-filter="locked">未解锁</button>
+                <button class="filter-btn" data-filter="common">普通</button>
+                <button class="filter-btn" data-filter="rare">稀有</button>
+                <button class="filter-btn" data-filter="epic">史诗</button>
+                <button class="filter-btn" data-filter="legendary">传说</button>
+            </div>
+
+            <!-- 成就列表 -->
+            <div class="achievements-list" id="achievements-list"></div>
+        </div>
+    </div>
+
+    <!-- 卡背定制界面 -->
+    <div id="cardback" class="screen hidden">
+        <div class="cardback-container">
+            <div class="cardback-header">
+                <h2>🎨 卡背定制</h2>
+                <button class="back-btn" id="btn-cardback-back">← 返回</button>
+            </div>
+
+            <div class="cardback-content">
+                <!-- 当前卡背预览 -->
+                <div class="current-back-section">
+                    <h3>当前卡背</h3>
+                    <div class="cardback-preview" id="current-back-preview">
+                        <div class="cardback-display" id="cardback-display"></div>
+                    </div>
+                    <div class="current-back-info" id="current-back-info"></div>
+                </div>
+
+                <!-- 卡背选择 -->
+                <div class="cardback-selection">
+                    <h3>选择卡背</h3>
+                    <div class="cardback-tabs">
+                        <button class="tab-btn active" data-tab="all">全部</button>
+                        <button class="tab-btn" data-tab="default">默认</button>
+                        <button class="tab-btn" data-tab="faction">阵营</button>
+                        <button class="tab-btn" data-tab="achievement">成就</button>
+                        <button class="tab-btn" data-tab="custom">自定义</button>
+                    </div>
+                    <div class="cardback-grid" id="cardback-grid"></div>
+                </div>
+
+                <!-- 自定义卡背创建 -->
+                <div class="custom-back-creator">
+                    <h3>创建自定义卡背</h3>
+                    <div class="custom-back-form">
+                        <div class="form-group">
+                            <label>卡背名称:</label>
+                            <input type="text" id="custom-back-name" placeholder="输入卡背名称" maxlength="20">
+                        </div>
+                        <div class="form-group">
+                            <label>描述:</label>
+                            <input type="text" id="custom-back-description" placeholder="输入卡背描述" maxlength="50">
+                        </div>
+                        <div class="form-group">
+                            <label>背景颜色:</label>
+                            <input type="color" id="custom-back-bg-color" value="#1a1a2e">
+                        </div>
+                        <div class="form-group">
+                            <label>边框颜色:</label>
+                            <input type="color" id="custom-back-border-color" value="#4169E1">
+                        </div>
+                        <div class="form-group">
+                            <label>图案:</label>
+                            <select id="custom-back-pattern">
+                                <option value="default">无图案</option>
+                                <option value="stripe">条纹</option>
+                                <option value="crosshatch">交叉线</option>
+                                <option value="diamond">菱形</option>
+                                <option value="starfield">星空</option>
+                                <option value="medal">勋章</option>
+                                <option value="lightning">闪电</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>图标:</label>
+                            <select id="custom-back-icon">
+                                <option value="🎨">🎨</option>
+                                <option value="🎴">🎴</option>
+                                <option value="⭐">⭐</option>
+                                <option value="🌟">🌟</option>
+                                <option value="✨">✨</option>
+                                <option value="🔥">🔥</option>
+                                <option value="💎">💎</option>
+                                <option value="🎯">🎯</option>
+                            </select>
+                        </div>
+                        <button class="action-btn" id="btn-create-custom-back">创建卡背</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 联机对战界面 -->
+    <div id="multiplayer" class="screen hidden">
+        <div class="multiplayer-container">
+            <div class="multiplayer-header">
+                <h2>🌐 联机对战</h2>
+                <button class="back-btn" id="btn-multiplayer-back">← 返回</button>
+            </div>
+
+            <!-- 连接状态 -->
+            <div class="connection-status" id="connection-status">
+                <span class="status-indicator offline"></span>
+                <span class="status-text">未连接</span>
+            </div>
+
+            <!-- 联机选项 -->
+            <div class="multiplayer-options" id="multiplayer-options">
+                <!-- 服务器配置 -->
+                <div class="option-group server-config">
+                    <h3>📡 服务器设置</h3>
+                    <div class="option-item">
+                        <label>服务器地址:</label>
+                        <input type="text" id="server-url-input" placeholder="例如: http://192.168.1.100:3000" maxlength="100">
+                    </div>
+                    <div class="server-preset-buttons">
+                        <button class="preset-btn" data-url="http://localhost:3000">本地服务器</button>
+                        <button class="preset-btn" id="btn-detect-lan">自动检测</button>
+                    </div>
+                    <div class="recent-servers" id="recent-servers" style="display: none;">
+                        <h4>最近使用的服务器:</h4>
+                        <div id="recent-servers-list"></div>
+                    </div>
+                    <button class="menu-btn" id="btn-connect">连接服务器</button>
+                </div>
+
+                <!-- 玩家配置 -->
+                <div class="option-group player-config">
+                    <h3>👤 玩家设置</h3>
+                    <div class="option-item">
+                        <label>玩家名称:</label>
+                        <input type="text" id="player-name-input" placeholder="输入你的名称" maxlength="20">
+                    </div>
+                </div>
+
+                <!-- 房间操作 -->
+                <div class="option-group room-actions">
+                    <h3>🏠 房间</h3>
+                    <div class="option-item">
+                        <label>房间ID:</label>
+                        <input type="text" id="room-id-input" placeholder="输入房间ID" maxlength="6">
+                    </div>
+                    <div class="action-buttons">
+                        <button class="menu-btn" id="btn-create-room">创建房间</button>
+                        <button class="menu-btn" id="btn-join-room">加入房间</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 房间列表 -->
+            <div class="rooms-section" id="rooms-section" style="display: none;">
+                <h3>📋 可用房间</h3>
+                <div class="rooms-list" id="rooms-list"></div>
+                <button class="action-btn" id="btn-refresh-rooms">刷新列表</button>
+            </div>
+
+            <!-- 房间信息 -->
+            <div class="room-info" id="room-info" style="display: none;">
+                <div class="room-header">
+                    <h3>🏠 房间 <span id="room-id-display"></span></h3>
+                    <button class="action-btn" id="btn-leave-room">离开房间</button>
+                </div>
+
+                <div class="players-section">
+                    <h4>玩家列表</h4>
+                    <div class="players-list" id="room-players-list"></div>
+                </div>
+
+                <!-- 准备区域 -->
+                <div class="ready-section" id="ready-section">
+                    <h4>准备开始</h4>
+                    <p class="ready-hint">选择牌组和阵营，然后点击准备</p>
+                    <div class="ready-actions">
+                        <button class="action-btn" id="btn-select-deck">选择牌组</button>
+                        <button class="action-btn" id="btn-ready" disabled>准备</button>
+                    </div>
+                </div>
+
+                <!-- 聊天区域 -->
+                <div class="chat-section">
+                    <h4>💬 聊天</h4>
+                    <div class="chat-messages" id="chat-messages"></div>
+                    <div class="chat-input">
+                        <input type="text" id="chat-input" placeholder="输入消息..." maxlength="100">
+                        <button class="action-btn" id="btn-send-chat">发送</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载脚本 -->
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/factions.js"></script>
+    <script src="js/keywords.js"></script>
+    <script src="js/effects.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/cardback.js"></script>
+    <script src="js/deckbuilder.js"></script>
+    <script src="js/deck-selector.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/network.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

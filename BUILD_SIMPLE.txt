@@ -1,0 +1,87 @@
+===============================================
+        BUILD ANDROID APK - SIMPLE GUIDE
+===============================================
+
+THE PROBLEM:
+-----------------------------------------------
+Cordova project was not properly initialized.
+This has been FIXED.
+
+===============================================
+        SOLUTION: 3 EASY STEPS
+===============================================
+
+STEP 1: Install JDK (Required)
+-----------------------------------------------
+Why needed: Android apps are written in Java
+
+Quick Download:
+https://www.oracle.com/java/technologies/downloads/#java17
+
+Alternative: Install Android Studio (includes everything)
+https://developer.android.com/studio
+
+Verify installation:
+Double-click: check_jdk.bat
+
+STEP 2: Setup Project
+-----------------------------------------------
+Double-click: setup_android.bat
+
+This will install necessary dependencies.
+
+STEP 3: Build APK
+-----------------------------------------------
+Double-click: build_final.bat
+
+This will build the APK file.
+
+Wait 5-10 minutes.
+
+===============================================
+        APK LOCATION
+===============================================
+
+After successful build:
+C:\Users\Z\自制卡牌\kards-style\platforms\android\app\build\outputs\apk\debug\app-debug.apk
+
+===============================================
+        WHAT'S BEEN FIXED
+===============================================
+
+✓ Created Cordova configuration files
+✓ Updated Android manifest
+✓ Created resource files
+✓ Updated build scripts
+✓ Fixed Cordova project initialization
+
+===============================================
+        AVAILABLE SCRIPTS
+===============================================
+
+check_jdk.bat         - Check if JDK is installed
+setup_android.bat      - Install dependencies and setup
+build_final.bat         - Build the APK (use this!)
+build_android.bat       - Alternative build script
+build_android_release.bat - Build release version
+
+===============================================
+        GAME START SCRIPTS
+===============================================
+
+start_game.bat           - Play on computer
+start_server.bat         - Start game server
+start_game_and_server.bat - Start both
+
+===============================================
+
+START BUILDING NOW:
+===============================================
+
+1. Install JDK (if not already installed)
+2. Run: setup_android.bat
+3. Run: build_final.bat
+4. Install APK on phone
+5. Enjoy the game!
+
+===============================================
