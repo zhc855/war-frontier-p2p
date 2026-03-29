@@ -51,16 +51,13 @@ jobs:
         cordova platform add android
         cordova prepare android
 
-     - name: Set Gradle wrapper version
-         run: |
-           cd platforms/android
-           wget
-   https://services.gradle.org/distributions/gradle-7.6.1-bin.zip
-           unzip -q gradle-7.6.1-bin.zip
-           ./gradle-7.6.1/bin/gradle wrapper --gradle-version=7.6.1
-           rm -rf gradle-7.6.1 gradle-7.6.1-bin.zip
+    - name: Install Cordova platforms
+      run:
+           cordova platform rm android || true
+           cordova platform add android
+           cordova prepare android
 
-    - name: Build Debug APK
+    - name: Build Debug APK 
       run: npx cordova build android --debug
 
     - name: Build Release APK
